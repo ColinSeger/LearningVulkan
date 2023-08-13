@@ -22,7 +22,7 @@ namespace lve {
 		float yaw = gameObject.transform.rotation.y;
 
 		const glm::vec3 forward {sin(yaw), 0.f, cos(yaw)};
-		const glm::vec3 rightDir {cos(yaw), 0.f, sin(yaw)};
+		const glm::vec3 rightDir {forward.z, 0.f, -forward.x};
 		const glm::vec3 upDir {0.f, -1.f, 0.f};
 
 		glm::vec3 moveDir{0.f};

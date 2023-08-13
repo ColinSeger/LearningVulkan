@@ -9,7 +9,7 @@
 #include <glm/gtc/constants.hpp>
 
 #include "simpleVulkanRenderSystem.h"
-#include "../timeCheck.h"
+#include "../../../timeCheck.h"
 
 namespace lve {
 
@@ -62,7 +62,7 @@ namespace lve {
 			pipelineConfig
 		);
 	}
-	void SimpleVulkanRenderSystem::RenderGameObjects(FrameData& frameData, std::vector<GameObject>& gameObjects) {
+	void SimpleVulkanRenderSystem::RenderGameObjects(FrameData& frameData) {
 		//Timer time;
 		vulkanPipeline->bind(frameData.commandBuffer);
 
@@ -79,7 +79,8 @@ namespace lve {
 
 		//auto projectionView = frameData.camera.GetProjectionMatrix() * frameData.camera.GetViewMatrix();
 
-		for (auto& object : gameObjects) {
+		for (auto& kv : frameData.gameObjects	) {
+			auto& object = kv.second;
 
 			SimplePushConstantData push{};
 			push.modelMatrix = object.transform.mat4();	

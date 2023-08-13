@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 
-#include "vulkanDevice.h"
+#include "../vulkanDevice.h"
 
 namespace lve {
 

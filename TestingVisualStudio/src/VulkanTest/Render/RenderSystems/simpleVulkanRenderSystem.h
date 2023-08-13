@@ -3,11 +3,11 @@
 #include <memory>
 #include <vector>
 
-#include "vulkanCamera.h"
-#include "vulkanPipeline.h"
-#include "vulkanDevice.h"
-#include "../gameObject.h"
-#include "vulkanFrameData.h"
+#include "../../Camera&Movement/vulkanCamera.h"
+#include "../Pipeline/vulkanPipeline.h"
+#include "../vulkanDevice.h"
+#include "../../../gameObject.h"
+#include "../vulkanFrameData.h"
 
 namespace lve {
 	class SimpleVulkanRenderSystem {
@@ -29,7 +29,7 @@ namespace lve {
 		SimpleVulkanRenderSystem(const SimpleVulkanRenderSystem&) = delete;
 		SimpleVulkanRenderSystem& operator=(const SimpleVulkanRenderSystem&) = delete;
 		
-		void RenderGameObjects(FrameData& frameData, std::vector<GameObject> &gameObjects);
+		void RenderGameObjects(FrameData& frameData);
 
 	};
 

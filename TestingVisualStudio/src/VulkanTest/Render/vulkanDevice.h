@@ -1,6 +1,6 @@
 #pragma once
 
-#include "vulkanWindow.h"
+#include "Window/vulkanWindow.h"
 
 // std lib headers
 #include <string>

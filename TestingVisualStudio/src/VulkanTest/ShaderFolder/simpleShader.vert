@@ -6,9 +6,12 @@ layout(location = 2) in vec3 normal;
 layout(location = 3) in vec3 uv;
 
 layout(location = 0) out vec3 fragColor;
+layout(location = 1) out vec3 fragPositionWorldSpace;
+layout(location = 2) out vec3 fragNormalWorldSpace;
 
 layout(set = 0, binding = 0) uniform GlobalUbo {
-	mat4 projectionViewMatrix;
+	mat4 projection;
+	mat4 view;
 	vec4 ambientLightColor;
 	vec3 lightPosition;
 	vec4 lightColor;//w is light intensity
@@ -27,10 +30,12 @@ void main()	{
 
 	vec4 worldPosition = push.modelMatrix * vec4(position, 1.0);
 
-	gl_Position = ubo.projectionViewMatrix * worldPosition;
+	gl_Position = ubo.projection * ubo.view * worldPosition;
 
-
-
+	fragNormalWorldSpace = normalize(mat3(push.normalMatrix) * normal);
+	fragPositionWorldSpace = worldPosition.xyz;
+	fragColor = color;
+}	
 	//gl_Position = push.transform * vec4(position, 1.0);
 
 	//Does not supprot non-uniform scale
@@ -43,17 +48,5 @@ void main()	{
 
 	//supports non-uniform scale
 	//But is computationally more expensive if you have many objects
-
-	vec3 normalWorldSpace = normalize(mat3(push.normalMatrix) * normal);
-
-	vec3 directionToLight = ubo.lightPosition - worldPosition.xyz;
 	//vec3 directionToLight = normalize(ubo.lightPosition - worldPosition.xyz); //Try this later Remember to remove normalize from difuseLight
 	//float atenuation = 1.0 / length(ubo.lightPosition - worldPosition.xyz);
-	float atenuation = 1.0 / dot(directionToLight, directionToLight);
-
-	vec3 lightColor = ubo.lightColor.xyz * ubo.lightColor.w * atenuation;
-	vec3 ambientLight = ubo.ambientLightColor.xyz * ubo.ambientLightColor.w;
-	vec3 difuseLight = lightColor * max(dot(normalWorldSpace, normalize(directionToLight)), 0);
-
-	fragColor = (difuseLight + ambientLight) * color;
-}

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "vulkanDevice.h"
-#include "vulkanBuffer.h"
+#include "../vulkanDevice.h"
+#include "../Buffer/vulkanBuffer.h"
 
 #define GLM_FORCE_RADIANS
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE

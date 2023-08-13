@@ -4,7 +4,7 @@
 #include <cassert>
 
 #include "vulkanPipeline.h"
-#include "vulkanModel.h"
+#include "../Model/vulkanModel.h"
 
 namespace lve {
 

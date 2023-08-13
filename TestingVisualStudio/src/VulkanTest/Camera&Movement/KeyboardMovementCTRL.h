@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../gameObject.h"
-#include "../VulkanTest/vulkanWindow.h"
+#include "../../gameObject.h"
+#include "../Render/Window/vulkanWindow.h"
 
 namespace lve {
 	class KeyboardMovementCTRL {

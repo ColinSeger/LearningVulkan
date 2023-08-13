@@ -3,11 +3,11 @@
 #include <memory>
 #include <vector>
 
-#include "vulkanWindow.h"
-#include "vulkanDevice.h"
+#include "Render/Window/vulkanWindow.h"
+#include "Render/vulkanDevice.h"
 #include "../gameObject.h"
-#include "vulkanRenderer.h"
-#include "vulkanDescriptor.h"
+#include "Render/Renderer/vulkanRenderer.h"
+#include "Render/Descriptors/vulkanDescriptor.h"
 
 namespace lve {
 	class vulkanApp{
@@ -23,7 +23,7 @@ namespace lve {
 
 		// note: order of declarations matters
 		std::unique_ptr<LveDescriptorPool> globalPool{};
-		std::vector<GameObject> gameObjects;
+		GameObject::Map gameObjects;
 
 	public:
 		static constexpr int WIDTH = 1920;

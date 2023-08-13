@@ -4,9 +4,9 @@
 #include <vector>
 #include <cassert>
 
-#include "vulkanWindow.h"
-#include "vulkanSwapChain.h"
-#include "vulkanDevice.h"
+#include "../Window/vulkanWindow.h"
+#include "../SwapChain/vulkanSwapChain.h"
+#include "../vulkanDevice.h"
 
 namespace lve {
 	class VulkanRender {

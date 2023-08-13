@@ -4,7 +4,7 @@
 
 
 #include "vulkanModel.h"
-#include "utils.h"
+#include "../utils.h"
 
 #define TINYOBJLOADER_IMPLEMENTATION
 #include <tiny_obj_loader.h>

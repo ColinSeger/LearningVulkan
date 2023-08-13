@@ -10,18 +10,19 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/constants.hpp>
 
-#include "vulkanBuffer.h"
-#include "vulkanCamera.h"
-#include "simpleVulkanRenderSystem.h"
+#include "Render/Buffer/vulkanBuffer.h"
+#include "Camera&Movement/vulkanCamera.h"
+#include "Render/RenderSystems/simpleVulkanRenderSystem.h"
 #include "vulkanApp.h"
 #include "../timeCheck.h"
-#include "../Movement/KeyboardMovementCTRL.h"
+#include "Camera&Movement/KeyboardMovementCTRL.h"
 
 
 namespace lve {
 
 	struct GlobalUbo {
-		glm::mat4 projectionView{1.f};
+		glm::mat4 projection{1.f};
+		glm::mat4 view{1.f};
 
 		glm::vec4 ambientLightColor{ 1.f, 1.f, 1.f, .02f };
 		glm::vec3 lightPosition {-1.f};
@@ -56,7 +57,7 @@ namespace lve {
 		}
 
 		auto globalSetLayout = VulkanDescriptorSetLayout::Builder(engineDevice)
-			.addBinding(0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT)
+			.addBinding(0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_ALL_GRAPHICS)
 			.build();
 
 		std::vector<VkDescriptorSet> globalDesrciptorSets(vulkanSwapChain::MAX_FRAMES_IN_FLIGHT);
@@ -115,19 +116,21 @@ namespace lve {
 					frameTime,
 					commandBuffer,
 					camera,
-					globalDesrciptorSets[frameIndex]
+					globalDesrciptorSets[frameIndex],
+					gameObjects
 				};
 
 
 				//Update
 				GlobalUbo ubo{};
-				ubo.projectionView = camera.GetProjectionMatrix() * camera.GetViewMatrix();
+				ubo.projection = camera.GetProjectionMatrix();
+				ubo.view = camera.GetViewMatrix();
 				uboBuffers[frameIndex]->WriteToBuffer(&ubo);
 				uboBuffers[frameIndex]->Flush();
 
 				//Render
 				vulkanRenderer.BeginSwapChainRenderPass(commandBuffer);
-				simpleRendererSystem.RenderGameObjects(frameData, gameObjects);
+				simpleRendererSystem.RenderGameObjects(frameData);
 				vulkanRenderer.EndSwapChainRenderPass(commandBuffer);
 				vulkanRenderer.EndFrame();
 			}
@@ -143,14 +146,14 @@ namespace lve {
 		flatVase.model = lveModel;
 		flatVase.transform.translation = { -.5f, .5f, 0.f };
 		flatVase.transform.scale = { 3.f, 1.5f, 3.f };
-		gameObjects.push_back(std::move(flatVase));
+		gameObjects.emplace(flatVase.GetId(), std::move(flatVase));
 
 		lveModel = VulkanModel::CreateModelFromDevice(engineDevice, "src/Models/smooth_vase.obj");
 		auto smoothVase = GameObject::CreateGameObject();
 		smoothVase.model = lveModel;
 		smoothVase.transform.translation = { .5f, .5f, 0.f };
 		smoothVase.transform.scale = { 3.f, 1.5f, 3.f };
-		gameObjects.push_back(std::move(smoothVase));
+		gameObjects.emplace(smoothVase.GetId(), std::move(smoothVase));
 
 
 		lveModel = VulkanModel::CreateModelFromDevice(engineDevice, "src/Models/quad.obj");
@@ -158,7 +161,7 @@ namespace lve {
 		floor.model = lveModel;
 		floor.transform.translation = { 0.f, .5f, 0.f };
 		floor.transform.scale = { 3.f, 1.5f, 3.f };
-		gameObjects.push_back(std::move(floor));
+		gameObjects.emplace(floor.GetId(), std::move(floor));
 
 		/*std::shared_ptr<VulkanModel> model = VulkanModel::CreateModelFromDevice(engineDevice, "src/Models/flat_vase.obj");
 

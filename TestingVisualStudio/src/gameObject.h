@@ -1,9 +1,10 @@
 #pragma once
 
 #include <memory>
+#include <unordered_map>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "VulkanTest/vulkanModel.h"
+#include "VulkanTest/Render/Model/vulkanModel.h"
 
 namespace lve {
 
@@ -28,6 +29,8 @@ namespace lve {
 		GameObject(id_t objId) : id { objId }{}
 
 	public:
+		using Map = std::unordered_map<id_t, GameObject>;
+
 
 		std::shared_ptr<VulkanModel> model{};
 		glm::vec3 color{};
